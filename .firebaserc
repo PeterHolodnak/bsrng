@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "bsrng": "bsrng-db8bf",
+    "default": "bsrng-db8bf"
+  }
+}

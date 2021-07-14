@@ -1,6 +1,7 @@
 import firebase from "firebase";
 import { useState } from "react";
 import { gamesCollection } from "../firebase/firebase";
+import "../css/game-add.scss";
 
 export default function AddGame() {
     const [gameName, setGameName] = useState("");
@@ -9,12 +10,13 @@ export default function AddGame() {
         gamesCollection.add({
             name: gameName,
             date: firebase.firestore.Timestamp.now(),
+            draws: [],
         });
         setGameName("");
     };
 
     return (
-        <div>
+        <div className="game__add">
             <input
                 type="text"
                 value={gameName}
@@ -22,7 +24,7 @@ export default function AddGame() {
                 placeholder="Insert new game name"
             />
             <button type="button" onClick={addGame}>
-                AddGame
+                Add game
             </button>
         </div>
     );

@@ -4,8 +4,8 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     font-size: calc(10px + 2vmin);
-    color: white;
+    color: #c7c7c7;
 }

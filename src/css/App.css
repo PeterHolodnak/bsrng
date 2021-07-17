@@ -1,11 +1,6 @@
 .app {
-    text-align: center;
     background-color: #282c34;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: center;
     font-size: calc(10px + 2vmin);
     color: #c7c7c7;
 }

@@ -2,8 +2,11 @@ import firebase from "firebase";
 import { useState } from "react";
 import { gamesCollection } from "../firebase/firebase";
 import "../css/game-add.scss";
+import { Button, Divider, makeStyles, TextField } from "@material-ui/core";
+import AddBoxIcon from "@material-ui/icons/AddBox";
 
 export default function AddGame() {
+    const classes = useStyles();
     const [gameName, setGameName] = useState("");
 
     const addGame = () => {
@@ -16,16 +19,31 @@ export default function AddGame() {
     };
 
     return (
-        <div className="game__add">
-            <input
-                type="text"
+        <div className={classes.gameAdd}>
+            <TextField
+                variant="outlined"
+                label="Game name"
+                placeholder="Add new game name"
                 value={gameName}
                 onChange={(e) => setGameName(e.target.value)}
-                placeholder="Insert new game name"
             />
-            <button type="button" onClick={addGame}>
+            <Button
+                variant="contained"
+                color="primary"
+                startIcon={<AddBoxIcon />}
+                onClick={addGame}
+            >
                 Add game
-            </button>
+            </Button>
         </div>
     );
 }
+
+const useStyles = makeStyles({
+    gameAdd: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "stretch",
+        paddingBottom: 40,
+    },
+});

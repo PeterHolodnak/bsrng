@@ -2,7 +2,7 @@ import firebase from "firebase";
 import { useState } from "react";
 import { gamesCollection } from "../firebase/firebase";
 import "../css/game-add.scss";
-import { Button, Divider, makeStyles, TextField } from "@material-ui/core";
+import { Button, makeStyles, TextField } from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 
 export default function AddGame() {

@@ -14,11 +14,13 @@ import {
     TextField,
 } from "@material-ui/core";
 import CasinoIcon from "@material-ui/icons/Casino";
+import { useMemo } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { gamesCollection } from "../firebase/firebase";
 import { Draw } from "../firebase/model/game";
 import { GameSnapshot } from "../model/game-snapshot";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
 
 type PropsType = {
     snapshot: GameSnapshot;
@@ -59,6 +61,31 @@ export default function GameDetail({ snapshot, playerName }: PropsType) {
         setPlayer("");
     };
 
+    const winners = useMemo(() => {
+        if (!snapshot.data.draws?.length) return [];
+
+        const max = snapshot.data.draws.reduce(
+            (prev, curr) => (prev > curr.score ? prev : curr.score),
+            0
+        );
+
+        return snapshot.data.draws
+            .filter((x) => x.score === max)
+            .map((x) => {
+                if (x.playerName === "Dejv") return x.playerName + "\u00A0😭";
+                if (x.playerName === "Petrik") return x.playerName + "\u00A0🥳";
+                return x.playerName;
+            });
+    }, [snapshot]);
+
+    const copyLink = () => {
+        navigator.clipboard.writeText(
+            `${window.location.origin}/game/${snapshot.id}${
+                player ? "?player=" + player : ""
+            }`
+        );
+    };
+
     return (
         <Grid item xs={12} md={6}>
             <Card raised>
@@ -71,6 +98,12 @@ export default function GameDetail({ snapshot, playerName }: PropsType) {
                 </Link>
                 <Divider></Divider>
                 <CardContent>
+                    {winners?.length && (
+                        <div className={classes.winners}>
+                            Winner{winners?.length > 1 ? "s" : ""}:&nbsp;
+                            {winners.join(", ")}
+                        </div>
+                    )}
                     {!!snapshot.data.draws?.length && (
                         <div className="game__draws">
                             <List
@@ -108,6 +141,9 @@ export default function GameDetail({ snapshot, playerName }: PropsType) {
                     <IconButton onClick={() => roll(snapshot)} color="primary">
                         <CasinoIcon fontSize="large" />
                     </IconButton>
+                    <IconButton onClick={() => copyLink()} color="primary">
+                        <FileCopyIcon fontSize="large" />
+                    </IconButton>
                 </CardActions>
             </Card>
         </Grid>
@@ -122,5 +158,8 @@ const useStyles = makeStyles({
     },
     playerName: {
         flexGrow: 1,
+    },
+    winners: {
+        color: "#04ff00",
     },
 });

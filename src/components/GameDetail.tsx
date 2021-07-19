@@ -15,16 +15,19 @@ import {
 } from "@material-ui/core";
 import CasinoIcon from "@material-ui/icons/Casino";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { gamesCollection } from "../firebase/firebase";
 import { Draw } from "../firebase/model/game";
 import { GameSnapshot } from "../model/game-snapshot";
 
 type PropsType = {
     snapshot: GameSnapshot;
+    playerName?: string;
 };
-export default function GameDetail({ snapshot }: PropsType) {
+
+export default function GameDetail({ snapshot, playerName }: PropsType) {
     const classes = useStyles();
-    const [player, setPlayer] = useState<string>("");
+    const [player, setPlayer] = useState<string>(playerName || "");
     const [playerNameError, setPlayerNameError] = useState<boolean>();
 
     const formatDate = (date: Date) => {
@@ -59,14 +62,13 @@ export default function GameDetail({ snapshot }: PropsType) {
     return (
         <Grid item xs={12} md={6}>
             <Card raised>
-                <CardHeader
-                    className={classes.gameHeader}
-                    title={snapshot.data.name}
-                    subheader={formatDate(snapshot.data.date.toDate())}
-                >
-                    <h3>{snapshot.data.name}</h3>
-                    {formatDate(snapshot.data.date.toDate())}
-                </CardHeader>
+                <Link to={`/game/${snapshot.id}`}>
+                    <CardHeader
+                        className={classes.gameHeader}
+                        title={snapshot.data.name}
+                        subheader={formatDate(snapshot.data.date.toDate())}
+                    ></CardHeader>
+                </Link>
                 <Divider></Divider>
                 <CardContent>
                     {!!snapshot.data.draws?.length && (

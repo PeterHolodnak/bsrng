@@ -1,6 +1,4 @@
-import "./css/App.css";
-import AddGame from "./components/AddGame";
-import GamesList from "./components/GamesList";
+import "./css/App.scss";
 import {
     Container,
     createTheme,
@@ -8,12 +6,9 @@ import {
     makeStyles,
     ThemeProvider,
 } from "@material-ui/core";
-
-const useStyles = makeStyles({
-    title: {
-        textAlign: "center",
-    },
-});
+import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import GamePage from "./pages/GamePage";
 
 function App() {
     const theme = createTheme({
@@ -25,7 +20,7 @@ function App() {
                 main: "#4f4475",
             },
             background: {
-                paper: "#282c34",
+                paper: "#404a5e",
                 default: "#282c34",
             },
             text: {
@@ -39,19 +34,35 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <div className="app">
-                <Container>
-                    <Grid container justifyContent="center">
-                        <Grid item xs={12}>
-                            <h1 className={classes.title}>BS RNG</h1>
+            <Router>
+                <main className="app">
+                    <Container>
+                        <Grid container justifyContent="center">
+                            <Grid item xs={12}>
+                                <Link to="/">
+                                    <h1 className={classes.title}>BS RNG</h1>
+                                </Link>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <AddGame />
-                    <GamesList />
-                </Container>
-            </div>
+                        <Switch>
+                            <Route path="/" exact component={HomePage}></Route>
+                            <Route
+                                path="/game/:id"
+                                exact
+                                component={GamePage}
+                            ></Route>
+                        </Switch>
+                    </Container>
+                </main>
+            </Router>
         </ThemeProvider>
     );
 }
+
+const useStyles = makeStyles({
+    title: {
+        textAlign: "center",
+    },
+});
 
 export default App;

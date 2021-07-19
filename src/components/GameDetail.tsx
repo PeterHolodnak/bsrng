@@ -98,7 +98,7 @@ export default function GameDetail({ snapshot, playerName }: PropsType) {
                 </Link>
                 <Divider></Divider>
                 <CardContent>
-                    {winners?.length && (
+                    {!!winners?.length && (
                         <div className={classes.winners}>
                             Winner{winners?.length > 1 ? "s" : ""}:&nbsp;
                             {winners.join(", ")}

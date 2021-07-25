@@ -11,6 +11,11 @@ import HomePage from "./pages/HomePage";
 import GamePage from "./pages/GamePage";
 
 function App() {
+    // prevent modification of Math.random function
+    if (!Object.isFrozen(Math)) {
+        Object.freeze(Math);
+    }
+
     const theme = createTheme({
         palette: {
             primary: {

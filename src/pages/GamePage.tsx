@@ -5,24 +5,39 @@ import GameDetail from "../components/GameDetail";
 import { gamesCollection } from "../firebase/firebase";
 import { GameSnapshot } from "../model/game-snapshot";
 import queryString from "query-string";
+import { Game } from "../firebase/model/game";
 
 export default function GamePage() {
     const { id } = useParams<{ id: string }>();
-    const [snapshot, setSnapshot] = useState<GameSnapshot>();
+    const [gameSnapshot, setGameSnapshot] = useState<GameSnapshot>();
     const [player, setPlayer] = useState<string>();
 
     useEffect(() => {
-        const fetchGame = async () => {
-            const data = await (await gamesCollection.doc(id).get()).data();
+        let unsubscribe: () => void = () => {};
+
+        const setData = (data?: Game) => {
             if (data) {
-                setSnapshot({
+                setGameSnapshot({
                     id,
                     data,
                 });
             }
         };
 
+        const fetchGame = async () => {
+            const doc = gamesCollection.doc(id);
+
+            unsubscribe = doc.onSnapshot((snapshot) => {
+                setData(snapshot.data());
+            });
+
+            const data = await (await doc.get()).data();
+            setData(data);
+        };
+
         fetchGame();
+
+        return () => unsubscribe();
     }, [id]);
 
     const { search } = useLocation();
@@ -35,8 +50,8 @@ export default function GamePage() {
 
     return (
         <Grid container justifyContent="center">
-            {snapshot ? (
-                <GameDetail snapshot={snapshot} playerName={player} />
+            {gameSnapshot ? (
+                <GameDetail snapshot={gameSnapshot} playerName={player} />
             ) : (
                 "No such game"
             )}
